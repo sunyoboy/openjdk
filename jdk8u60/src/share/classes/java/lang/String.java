@@ -3147,6 +3147,10 @@ public final class String
     }
 
     /**
+     * 返回字符串对象的规范表示。
+     * 字符串池最初是空的，由类私下维护
+     */
+    /**
      * Returns a canonical representation for the string object.
      * <p>
      * A pool of strings, initially empty, is maintained privately by the

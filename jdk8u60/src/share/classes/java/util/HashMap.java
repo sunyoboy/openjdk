@@ -271,6 +271,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      */
     static final int MIN_TREEIFY_CAPACITY = 64;
 
+    /** 基本的Hash二进制节点 */
     /**
      * Basic hash bin node, used for most entries.  (See below for
      * TreeNode subclass, and in LinkedHashMap for its Entry subclass.)
@@ -317,6 +318,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
 
     /* ---------------- Static utilities -------------- */
 
+    /** 按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。*/
     /**
      * Computes key.hashCode() and spreads (XORs) higher bits of hash
      * to lower.  Because the table uses power-of-two masking, sets of
