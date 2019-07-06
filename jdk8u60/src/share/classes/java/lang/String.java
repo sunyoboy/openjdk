@@ -110,6 +110,7 @@ import java.util.regex.PatternSyntaxException;
 
 public final class String
     implements java.io.Serializable, Comparable<String>, CharSequence {
+    /** 字符存储 */
     /** The value is used for character storage. */
     private final char value[];
 
@@ -2566,6 +2567,7 @@ public final class String
         int firstUpper;
         final int len = value.length;
 
+        /** 定义scan, "break scan;"跳出循环 */
         /* Now check if there are any characters that need to be changed. */
         scan: {
             for (firstUpper = 0 ; firstUpper < len; ) {
@@ -2833,6 +2835,9 @@ public final class String
         return toUpperCase(Locale.getDefault());
     }
 
+    /**
+     * (val[st] <= ' ') 含义：如果字符 <= ' '（32），即字符为控制字符或可显示字符
+     */
     /**
      * Returns a string whose value is this string, with any leading and trailing
      * whitespace removed.

@@ -150,9 +150,11 @@ class Thread implements Runnable {
     private Thread         threadQ;
     private long           eetop;
 
+    /* 是否单步执行 */
     /* Whether or not to single_step this thread. */
     private boolean     single_step;
 
+    /* 是否为守护进程 */
     /* Whether or not the thread is a daemon thread. */
     private boolean     daemon = false;
 
@@ -165,6 +167,9 @@ class Thread implements Runnable {
     /* The group of this thread */
     private ThreadGroup group;
 
+    /**
+     * 上下文
+     */
     /* The context ClassLoader for this thread */
     private ClassLoader contextClassLoader;
 
@@ -177,6 +182,7 @@ class Thread implements Runnable {
         return threadInitNumber++;
     }
 
+    /* pertaining: 有关，maintain: 维护 */
     /* ThreadLocal values pertaining to this thread. This map is maintained
      * by the ThreadLocal class. */
     ThreadLocal.ThreadLocalMap threadLocals = null;
@@ -213,7 +219,10 @@ class Thread implements Runnable {
 
     private volatile int threadStatus = 0;
 
-
+    /**
+     * synchronized 关键字
+     * @return
+     */
     private static synchronized long nextThreadID() {
         return ++threadSeqNumber;
     }
@@ -756,8 +765,10 @@ class Thread implements Runnable {
             group = null;
         }
         /* Aggressively null out all reference fields: see bug 4006245 */
+        /* 主动清空所有引用字段 */
         target = null;
         /* Speed the release of some of these resources */
+        /* 加速资源的释放 */
         threadLocals = null;
         inheritableThreadLocals = null;
         inheritedAccessControlContext = null;
