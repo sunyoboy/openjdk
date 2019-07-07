@@ -43,6 +43,9 @@ import java.security.PrivilegedExceptionAction;
 import java.security.PrivilegedActionException;
 import java.security.AccessControlException;
 import sun.security.util.SecurityConstants;
+/**
+ * 工厂及实用程序
+ */
 
 /**
  * Factory and utility methods for {@link Executor}, {@link

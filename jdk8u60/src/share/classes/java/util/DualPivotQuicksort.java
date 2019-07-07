@@ -25,6 +25,7 @@
 
 package java.util;
 
+/** 快排序，时间复杂度为O(n log(n)) */
 /**
  * This class implements the Dual-Pivot Quicksort algorithm by
  * Vladimir Yaroslavskiy, Jon Bentley, and Josh Bloch. The algorithm
@@ -46,6 +47,7 @@ package java.util;
  */
 final class DualPivotQuicksort {
 
+    /** 单例模式（Singleton）,设为私有，防止实例化 */
     /**
      * Prevents instantiation.
      */
@@ -106,6 +108,7 @@ final class DualPivotQuicksort {
      */
     static void sort(int[] a, int left, int right,
                      int[] work, int workBase, int workLen) {
+        // QUICKSORT_THRESHOLD = 286;
         // Use Quicksort on small arrays
         if (right - left < QUICKSORT_THRESHOLD) {
             sort(a, left, right, true);
@@ -214,9 +217,11 @@ final class DualPivotQuicksort {
     private static void sort(int[] a, int left, int right, boolean leftmost) {
         int length = right - left + 1;
 
+        // 长度小于47的数组，使用插入排序 INSERTION_SORT_THRESHOLD = 47;
         // Use insertion sort on tiny arrays
         if (length < INSERTION_SORT_THRESHOLD) {
             if (leftmost) {
+                /** 传统插入排序（没有哨兵） */
                 /*
                  * Traditional (without sentinel) insertion sort,
                  * optimized for server VM, is used in case of
@@ -233,6 +238,7 @@ final class DualPivotQuicksort {
                     a[j + 1] = ai;
                 }
             } else {
+                /** 跳过最长的升序 */
                 /*
                  * Skip the longest ascending sequence.
                  */
@@ -395,15 +401,18 @@ final class DualPivotQuicksort {
             a[left]  = a[less  - 1]; a[less  - 1] = pivot1;
             a[right] = a[great + 1]; a[great + 1] = pivot2;
 
+            // 递归地，不包括已知的枢轴
             // Sort left and right parts recursively, excluding known pivots
             sort(a, left, less - 2, leftmost);
             sort(a, great + 2, right, false);
 
             /*
+             * @author 构成大于数组的4/7
              * If center part is too large (comprises > 4/7 of the array),
              * swap internal pivot values to ends.
              */
             if (less < e1 && e5 < great) {
+                /** pivot 轴 */
                 /*
                  * Skip elements, which are equal to pivot values.
                  */
@@ -415,6 +424,7 @@ final class DualPivotQuicksort {
                     --great;
                 }
 
+                /** 分区、分割 */
                 /*
                  * Partitioning:
                  *
@@ -1002,6 +1012,7 @@ final class DualPivotQuicksort {
      */
     static void sort(short[] a, int left, int right,
                      short[] work, int workBase, int workLen) {
+        // 对大数组使用计数排序
         // Use counting sort on large arrays
         if (right - left > COUNTING_SORT_THRESHOLD_FOR_SHORT_OR_CHAR) {
             int[] count = new int[NUM_SHORT_VALUES];
