@@ -801,6 +801,7 @@ public class ForkJoinPool extends AbstractExecutorService {
         volatile int scanState;    // versioned, <0: inactive; odd:scanning
         int stackPred;             // pool stack (ctl) predecessor
         int nsteals;               // number of steals
+        // 随机化和窃取索引提示
         int hint;                  // randomization and stealer index hint
         int config;                // pool index and mode
         volatile int qlock;        // 1: locked, < 0: terminate; else 0

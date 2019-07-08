@@ -230,6 +230,7 @@ public class LinkedBlockingDeque<E>
         return true;
     }
 
+    /** 把节点作为最后的元素，如果链表已满，则返回失败 */
     /**
      * Links node as last element, or returns false if full.
      */

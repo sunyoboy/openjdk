@@ -542,6 +542,7 @@ public abstract class AbstractQueuedSynchronizer
     }
 
     /**
+     * 设置同步状态
      * Sets the value of synchronization state.
      * This operation has memory semantics of a {@code volatile} write.
      * @param newState the new state value

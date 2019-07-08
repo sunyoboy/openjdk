@@ -145,11 +145,13 @@ public class ForkJoinWorkerThread extends Thread {
     }
 
     /**
+     * explicitly: 明确地
      * This method is required to be public, but should never be
      * called explicitly. It performs the main run loop to execute
      * {@link ForkJoinTask}s.
      */
     public void run() {
+        // 只运行一次
         if (workQueue.array == null) { // only run once
             Throwable exception = null;
             try {
