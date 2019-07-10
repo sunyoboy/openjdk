@@ -380,6 +380,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
     private static final int COUNT_BITS = Integer.SIZE - 3;
     private static final int CAPACITY   = (1 << COUNT_BITS) - 1;
 
+    // runState 存储在高阶bit位
     // runState is stored in the high-order bits
     private static final int RUNNING    = -1 << COUNT_BITS;
     private static final int SHUTDOWN   =  0 << COUNT_BITS;
@@ -671,6 +672,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * Methods for setting control state
      */
 
+    // 过渡、转变到指定的状态
     /**
      * Transitions runState to given target, or leaves it alone if
      * already at least the given target.
@@ -770,6 +772,8 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
         }
     }
 
+
+    // onlyOne 如果为true， 一次最多中断一个worker
     /**
      * Interrupts threads that might be waiting for tasks (as
      * indicated by not being locked) so they can check for
@@ -827,6 +831,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      */
 
     /**
+     * 根据handler 的策略执行拒绝策略
      * Invokes the rejected execution handler for the given command.
      * Package-protected for use by ScheduledThreadPoolExecutor.
      */
@@ -1355,6 +1360,10 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
     public void execute(Runnable command) {
         if (command == null)
             throw new NullPointerException();
+        /**
+         * 如果运行的线程少于 corePoolSize，则创建新线程来处理请求，即使其他辅助线程是空闲的。
+         * 如果运行的线程多于 corePoolSize 而少于 maximumPoolSize，则仅当队列满时才创建新线程。
+         */
         /*
          * Proceed in 3 steps:
          *
@@ -1384,17 +1393,18 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
             c = ctl.get();
         }
 
-        // 把当前任务加入队列
+        // 把当前任务加入队列,线程池未运行或添加失败则执行拒绝，
         if (isRunning(c) && workQueue.offer(command)) {
             int recheck = ctl.get();
             if (! isRunning(recheck) && remove(command))
                 reject(command);
-            else if (workerCountOf(recheck) == 0)
+            else if (workerCountOf(recheck) == 0) // 如果线程数量为0,则通过addWorker(null, false) 新建线程
                 addWorker(null, false);
         } else if (!addWorker(command, false))
             reject(command);
     }
 
+    // 优雅的中止线程的方式，使用中断
     /**
      * Initiates an orderly shutdown in which previously submitted
      * tasks are executed, but no new tasks will be accepted.

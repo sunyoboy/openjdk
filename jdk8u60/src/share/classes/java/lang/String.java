@@ -655,6 +655,7 @@ public final class String
      *             string.
      */
     public char charAt(int index) {
+        // 参数越界校验(范围应为0 to value.length-1)
         if ((index < 0) || (index >= value.length)) {
             throw new StringIndexOutOfBoundsException(index);
         }
@@ -824,6 +825,8 @@ public final class String
         if (srcBegin > srcEnd) {
             throw new StringIndexOutOfBoundsException(srcEnd - srcBegin);
         }
+
+        // native 方法
         System.arraycopy(value, srcBegin, dst, dstBegin, srcEnd - srcBegin);
     }
 
@@ -1342,6 +1345,15 @@ public final class String
      *          or case insensitive depends on the {@code ignoreCase}
      *          argument.
      */
+    // 用于检测两个字符串在一个区域内是否相等
+    /**
+     * ignoreCase -- 如果为 true，则比较字符时忽略大小写。
+     * toffset -- 此字符串中子区域的起始偏移量。
+     * other -- 字符串参数。
+     * ooffset -- 字符串参数中子区域的起始偏移量。
+     * len -- 要比较的字符数。
+     * @return
+     */
     public boolean regionMatches(boolean ignoreCase, int toffset,
             String other, int ooffset, int len) {
         char ta[] = value;
@@ -1370,6 +1382,7 @@ public final class String
                 if (u1 == u2) {
                     continue;
                 }
+                // 特殊字符存在，需要再转为小写字符进行比较
                 // Unfortunately, conversion to uppercase does not work properly
                 // for the Georgian alphabet, which has strange rules about case
                 // conversion.  So we need to make one last check before
@@ -1947,7 +1960,7 @@ public final class String
      * </pre></blockquote>
      *
      * @param      beginIndex   the beginning index, inclusive.
-     * @param      endIndex     the ending index, exclusive.
+     * @param      endIndex     the ending index, exclusive. 不包含endIndex
      * @return     the specified substring.
      * @exception  IndexOutOfBoundsException  if the
      *             {@code beginIndex} is negative, or
