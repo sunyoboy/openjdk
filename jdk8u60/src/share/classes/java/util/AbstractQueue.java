@@ -91,7 +91,7 @@ public abstract class AbstractQueue<E>
      * @throws IllegalArgumentException if some property of this element
      *         prevents it from being added to this queue
      */
-    public boolean add(E e) {
+    public boolean add(E e) { // 与offer一样的作用
         if (offer(e))
             return true;
         else

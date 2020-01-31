@@ -613,6 +613,12 @@ class SocketChannelImpl
         }
     }
 
+    /**
+     * SocketChannel connect()方法的实现
+     * @param sa
+     * @return
+     * @throws IOException
+     */
     public boolean connect(SocketAddress sa) throws IOException {
         int localPort = 0;
 

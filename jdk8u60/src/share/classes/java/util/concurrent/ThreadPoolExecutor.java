@@ -596,7 +596,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * runWorker).
      */
     private final class Worker
-        extends AbstractQueuedSynchronizer
+        extends AbstractQueuedSynchronizer // 线程池的Worker类继承AQS
         implements Runnable
     {
         /**
@@ -908,9 +908,9 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * @return true if successful
      */
     private boolean addWorker(Runnable firstTask, boolean core) {
-        retry:
-        for (;;) {
-            int c = ctl.get();
+        retry: // goto语句
+        for (;;) { // 自旋
+            int c = ctl.get(); // 维护状态
             int rs = runStateOf(c);
 
             // Check if queue empty only if necessary.
@@ -1058,7 +1058,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * @return task, or null if the worker must exit, in which case
      *         workerCount is decremented
      */
-    private Runnable getTask() {
+    private Runnable getTask() { // 获取任务
         boolean timedOut = false; // Did the last poll() time out?
 
         for (;;) {
@@ -1088,7 +1088,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
             try {
                 Runnable r = timed ?
                     workQueue.poll(keepAliveTime, TimeUnit.NANOSECONDS) :
-                    workQueue.take();
+                    workQueue.take(); // 获取task
                 if (r != null)
                     return r;
                 timedOut = true;
@@ -1162,11 +1162,10 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
                     !wt.isInterrupted())
                     wt.interrupt();
                 try {
-                    beforeExecute(wt, task);
+                    beforeExecute(wt, task); // 之前
                     Throwable thrown = null;
                     try {
-                        // 执行作业
-                        task.run();
+                        task.run(); // 执行任务
                     } catch (RuntimeException x) {
                         thrown = x; throw x;
                     } catch (Error x) {
@@ -1174,7 +1173,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
                     } catch (Throwable x) {
                         thrown = x; throw new Error(x);
                     } finally {
-                        afterExecute(task, thrown);
+                        afterExecute(task, thrown); // AOP 之后
                     }
                 } finally {
                     task = null;
@@ -1384,24 +1383,24 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
          * thread.  If it fails, we know we are shut down or saturated
          * and so reject the task.
          */
-        int c = ctl.get();
-        if (workerCountOf(c) < corePoolSize) {
+        int c = ctl.get(); // 获取当前线程状态
+        if (workerCountOf(c) < corePoolSize) { // 判断当前线程数量是否小于核心 step 1
 
             // addWorkder启动线程
-            if (addWorker(command, true))
+            if (addWorker(command, true)) // 调用addWorker方法, Worker.run() > runWork()
                 return;
             c = ctl.get();
         }
 
         // 把当前任务加入队列,线程池未运行或添加失败则执行拒绝，
-        if (isRunning(c) && workQueue.offer(command)) {
+        if (isRunning(c) && workQueue.offer(command)) { // step 2: 大于核心，offer 到workQueue队列, take 队列的task
             int recheck = ctl.get();
-            if (! isRunning(recheck) && remove(command))
+            if (! isRunning(recheck) && remove(command)) // double check （双检查）
                 reject(command);
             else if (workerCountOf(recheck) == 0) // 如果线程数量为0,则通过addWorker(null, false) 新建线程
                 addWorker(null, false);
-        } else if (!addWorker(command, false))
-            reject(command);
+        } else if (!addWorker(command, false)) // step 3 如果1、2 队列都满了，直接new 一个非核心的
+            reject(command);                         // step 4 拒绝策略
     }
 
     // 优雅的中止线程的方式，使用中断
@@ -2068,7 +2067,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
         /**
          * Creates an {@code AbortPolicy}.
          */
-        public AbortPolicy() { }
+        public AbortPolicy() { }  // LRU
 
         /**
          * Always throws RejectedExecutionException.

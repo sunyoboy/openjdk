@@ -263,7 +263,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
                 V result;
                 boolean ran;
                 try {
-                    result = c.call();
+                    result = c.call(); // 获取返回值
                     ran = true;
                 } catch (Throwable ex) {
                     result = null;

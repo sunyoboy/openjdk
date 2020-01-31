@@ -277,7 +277,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * TreeNode subclass, and in LinkedHashMap for its Entry subclass.)
      */
     static class Node<K,V> implements Map.Entry<K,V> {
-        final int hash;
+        final int hash; // 目的是干什么？
         final K key;
         V value;
         Node<K,V> next;
@@ -618,7 +618,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Implements Map.put and related methods
-     *
+     * put 方法实现
      * @param hash hash for key
      * @param key the key
      * @param value the value to put
@@ -644,7 +644,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                 for (int binCount = 0; ; ++binCount) {
                     if ((e = p.next) == null) {
                         p.next = newNode(hash, key, value, null);
-                        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st 判断是否转换为红黑树
                             treeifyBin(tab, hash);
                         break;
                     }

@@ -383,15 +383,15 @@ public abstract class AbstractQueuedSynchronizer
         /** Marker to indicate a node is waiting in exclusive mode */
         static final Node EXCLUSIVE = null;
 
-        /** waitStatus value to indicate thread has cancelled */
+        /** waitStatus value to indicate thread has cancelled, 不能再放到队列。因中断、完成，退出队列 */
         static final int CANCELLED =  1;
-        /** waitStatus value to indicate successor's thread needs unparking */
+        /** waitStatus value to indicate successor's thread needs unparking, 节点的继任节点阻塞 */
         static final int SIGNAL    = -1;
-        /** waitStatus value to indicate thread is waiting on condition */
+        /** waitStatus value to indicate thread is waiting on condition 条件阻塞*/
         static final int CONDITION = -2;
         /**
          * waitStatus value to indicate the next acquireShared should
-         * unconditionally propagate
+         * unconditionally propagate 共享模式下头节点的状态
          */
         static final int PROPAGATE = -3;
 
@@ -600,7 +600,7 @@ public abstract class AbstractQueuedSynchronizer
     /**
      * Creates and enqueues node for current thread and given mode.
      *
-     * @param mode Node.EXCLUSIVE for exclusive, Node.SHARED for shared
+     * @param mode Node.EXCLUSIVE for exclusive, Node.SHARED for shared 独占、共享模式
      * @return the new node
      */
     private Node addWaiter(Node mode) {

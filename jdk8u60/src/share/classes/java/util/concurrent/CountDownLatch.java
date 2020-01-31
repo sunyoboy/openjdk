@@ -174,7 +174,7 @@ public class CountDownLatch {
         }
 
         protected boolean tryReleaseShared(int releases) {
-            // Decrement count; signal when transition to zero
+            // Decrement count; signal when transition to zero for (;;)指令少，不占用寄存器，而且没有判断跳转，比while (true)好
             for (;;) {
                 int c = getState();
                 if (c == 0)
